@@ -4,16 +4,19 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/anirudhani06/Go-api/db"
 	"github.com/anirudhani06/Go-api/routes"
 )
 
 type APIServer struct {
 	addr string
+	db   *db.PostgresStore
 }
 
-func NewAPIServer(addr string) *APIServer {
+func NewAPIServer(addr string, db *db.PostgresStore) *APIServer {
 	return &APIServer{
 		addr: addr,
+		db:   db,
 	}
 
 }
