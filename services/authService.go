@@ -16,6 +16,9 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 	if err := utils.ParseJson(r, &payload); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
 	}
+	if err := types.ValidateUser(payload); err != nil {
+		utils.WriteError(w, http.StatusBadRequest, err)
+	}
 
 	utils.WriteJson(w, http.StatusCreated, payload)
 

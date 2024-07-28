@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/anirudhani06/Go-api/helpers"
 )
 
 func ParseJson(r *http.Request, payload any) error {
@@ -23,5 +25,10 @@ func WriteJson(w http.ResponseWriter, statusCode int, v any) error {
 }
 
 func WriteError(w http.ResponseWriter, statusCode int, err error) {
-	WriteJson(w, statusCode, map[string]string{"error": err.Error()})
+	response := helpers.Response{
+		Status: false,
+		Data:   map[string]string{},
+		Errors: err.Error(),
+	}
+	WriteJson(w, statusCode, response)
 }
