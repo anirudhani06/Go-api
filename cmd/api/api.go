@@ -1,36 +1,34 @@
 package api
 
 import (
-	"database/sql"
 	"log"
 	"net/http"
 
-	"github.com/anirudhani06/Go-api/services/user"
+	"github.com/anirudhani06/Go-api/routes"
 )
 
 type APIServer struct {
 	addr string
-	db   *sql.DB
 }
 
-func NewAPIServer(addr string, db *sql.DB) *APIServer {
+func NewAPIServer(addr string) *APIServer {
 	return &APIServer{
 		addr: addr,
-		db:   db,
 	}
 
 }
 
 func (s *APIServer) Run() error {
-	router := http.NewServeMux()
 
-	userRoutes := user.NewHandler()
-	userRoutes.UserRoutes(router)
-
+	mux := http.NewServeMux()
 	v1 := http.NewServeMux()
-	v1.Handle("/api/v1/", http.StripPrefix("/api/v1", router))
+
+	v1.Handle("/auth/", http.StripPrefix("/auth", routes.AuthRoutes()))
+	v1.Handle("/users/", http.StripPrefix("/users", routes.UserRoutes()))
+
+	mux.Handle("/api/v1/", http.StripPrefix("/api/v1", v1))
 
 	log.Println("Listening on: ", s.addr)
-	return http.ListenAndServe(s.addr, router)
+	return http.ListenAndServe(s.addr, mux)
 
 }
