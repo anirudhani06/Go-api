@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/anirudhani06/Go-api/db"
+	"github.com/anirudhani06/Go-api/middleware"
 	"github.com/anirudhani06/Go-api/routes"
 )
 
@@ -32,6 +33,6 @@ func (s *APIServer) Run() error {
 	mux.Handle("/api/v1/", http.StripPrefix("/api/v1", v1))
 
 	log.Println("Listening on: ", s.addr)
-	return http.ListenAndServe(s.addr, mux)
+	return http.ListenAndServe(s.addr, middleware.Logging(mux))
 
 }
